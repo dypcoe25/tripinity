@@ -1,0 +1,33 @@
+body {
+    font-family: Arial;
+    text-align: center;
+    background-color: #eaf6ff;
+}
+
+h1 {
+    background-color: #2196f3;
+    color: white;
+    padding: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    background-color: #2196f3;
+    color: white;
+    cursor: pointer;
+}
+
+button:disabled {
+    background-color: gray;
+}
+
+#content {
+    margin-top: 50px;
+}
+
+input, select {
+    padding: 10px;
+    margin: 10px;
+}
