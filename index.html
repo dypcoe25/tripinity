@@ -1,32 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Travel Planner</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-    <h1>✈️ Travel Planner</h1>
-
-    <nav>
-        <button onclick="home()">Home</button>
-        <button onclick="weather()">Weather</button>
-        <button onclick="budget()">Budget</button>
-        <button onclick="mood()">Mood</button>
-        <button onclick="destination()">Destination</button>
-    </nav>
+    <header>
+        <h1>✈️ Travel Planner</h1>
+        <nav>
+            <button onclick="home()">Home</button>
+            <button onclick="weather()">Weather</button>
+            <button onclick="budget()">Budget</button>
+            <button onclick="mood()">Mood</button>
+            <button onclick="destination()">Destination</button>
+        </nav>
+    </header>
 
     <div id="content">
-        <h2>Plan Your Perfect Trip</h2>
-        <p>Select all four options to start planning.</p>
-
-        <button id="start" onclick="startPlanning()" disabled>
-            Start Planning
-        </button>
+        <!-- Content gets dynamic state injected via JavaScript -->
     </div>
 
     <script src="script.js"></script>
-
 </body>
 </html>
