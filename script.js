@@ -1,4 +1,3 @@
-// State object to store actual selected values
 const tripState = {
     weather: "",
     budget: "",
@@ -6,10 +5,8 @@ const tripState = {
     destination: ""
 };
 
-// Gemini API Key
 const GEMINI_API_KEY = " ";
 
-// Render home page immediately when script loads
 window.onload = function() {
     home();
 };
@@ -24,10 +21,9 @@ function home() {
     document.getElementById("content").innerHTML = `
         <div class="hero">
             <div class="hero-overlay">
-                <h2>Plan Your Perfect Trip</h2>
-                <p>Select Weather, Budget, Mood, and Destination to start.</p>
+                <h2>Plan Your Perfect Escape</h2>
+                <p>Customize your weather, budget, vibe, and destination to unlock a custom AI itinerary.</p>
                 
-                <!-- Display status of user selections -->
                 <div class="selection-status">
                     <span class="badge ${tripState.weather ? 'active' : ''}">
                         ${tripState.weather ? '🌦️ ' + tripState.weather : '🌦️ Weather'}
@@ -44,29 +40,29 @@ function home() {
                 </div>
 
                 <button id="start" onclick="startPlanning()" ${ready ? "" : "disabled"}>
-                    ${ready ? "Start Planning! 🚀" : "Complete All Choices"}
+                    ${ready ? "Generate Travel Itinerary 🚀" : "Complete All Options"}
                 </button>
             </div>
         </div>
 
         <div class="gallery-section">
-            <h3>Explore Nature Destinations</h3>
+            <h3>Featured Travel Destinations</h3>
             <div class="image-grid">
                 <div class="card">
-                    <img src="https://media.giphy.com/media/l0HlTy9x8FZo0XO1i/giphy.gif" alt="Waterfall Loop">
+                    <img src="https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=600&q=80" alt="Waterfalls">
                     <span>Cascading Waterfalls</span>
                 </div>
                 <div class="card">
-                    <img src="https://media.giphy.com/media/3o7qE1YN7aBOFPRw8E/giphy.gif" alt="Forest Pines Loop">
-                    <span>Misty Pine Forests</span>
+                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80" alt="Tropical Beach">
+                    <span>Tropical Beaches</span>
                 </div>
                 <div class="card">
-                    <img src="https://media.giphy.com/media/xT0Gqc1v17P89Q1jcA/giphy.gif" alt="Ocean Waves Loop">
-                    <span>Tropical Ocean Waves</span>
+                    <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80" alt="Mountains">
+                    <span>Alpine Mountains</span>
                 </div>
                 <div class="card">
-                    <img src="https://media.giphy.com/media/26FmRaD3pIe7f5zP2/giphy.gif" alt="Northern Lights Loop">
-                    <span>Northern Lights</span>
+                    <img src="https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=600&q=80" alt="Misty Forest">
+                    <span>Misty Forests</span>
                 </div>
             </div>
         </div>
@@ -78,7 +74,7 @@ function weather() {
         <div class="form-card">
             <h2>🌦️ Select Season</h2>
             <select id="weatherSelect" onchange="weatherSelected(this.value)">
-                <option value="">Choose Option</option>
+                <option value="">Choose Season</option>
                 <option value="Summer" ${tripState.weather === 'Summer' ? 'selected' : ''}>Summer</option>
                 <option value="Winter" ${tripState.weather === 'Winter' ? 'selected' : ''}>Winter</option>
                 <option value="Monsoon" ${tripState.weather === 'Monsoon' ? 'selected' : ''}>Monsoon</option>
@@ -116,9 +112,9 @@ function budgetSelected() {
 function mood() {
     document.getElementById("content").innerHTML = `
         <div class="form-card">
-            <h2>🎭 Select Mood</h2>
+            <h2>🎭 Select Travel Vibe</h2>
             <select onchange="moodSelected(this.value)">
-                <option value="">Choose Option</option>
+                <option value="">Choose Mood</option>
                 <option value="Adventure" ${tripState.mood === 'Adventure' ? 'selected' : ''}>Adventure</option>
                 <option value="Relaxing" ${tripState.mood === 'Relaxing' ? 'selected' : ''}>Relaxing</option>
                 <option value="Romantic" ${tripState.mood === 'Romantic' ? 'selected' : ''}>Romantic</option>
@@ -138,21 +134,17 @@ function moodSelected(value) {
 function destination() {
     document.getElementById("content").innerHTML = `
         <div class="form-card">
-            <h2>📍 Select Destination</h2>
-            <select onchange="destinationSelected(this.value)">
-                <option value="">Choose Option</option>
-                <option value="Goa" ${tripState.destination === 'Goa' ? 'selected' : ''}>Goa</option>
-                <option value="Manali" ${tripState.destination === 'Manali' ? 'selected' : ''}>Manali</option>
-                <option value="Jaipur" ${tripState.destination === 'Jaipur' ? 'selected' : ''}>Jaipur</option>
-                <option value="Mumbai" ${tripState.destination === 'Mumbai' ? 'selected' : ''}>Mumbai</option>
-            </select>
+            <h2>📍 Target Destination</h2>
+            <input type="text" id="destinationInput" placeholder="e.g. Kyoto, Paris, Goa, Manali" value="${tripState.destination}">
+            <button onclick="destinationSelected()">Save Destination</button>
         </div>
     `;
 }
 
-function destinationSelected(value) {
-    if (value !== "") {
-        tripState.destination = value;
+function destinationSelected() {
+    let val = document.getElementById("destinationInput").value.trim();
+    if (val !== "") {
+        tripState.destination = val;
     }
     home();
 }
@@ -160,12 +152,10 @@ function destinationSelected(value) {
 async function startPlanning() {
     if (!isReady()) return;
 
-    // Show loading state
     document.getElementById("content").innerHTML = `
-        <div class="form-card" style="width: 80%; max-width: 500px;">
-            <h2>✨ Generating Custom Itinerary...</h2>
-            <p>Creating a plan for ${tripState.destination} (${tripState.mood} vibe, ${tripState.weather})...</p>
-            <div style="margin-top: 15px; font-size: 2rem;">✈️ 🌊 🏔️</div>
+        <div class="form-card" style="max-width: 500px;">
+            <h2>✨ Building Your Travel Plan...</h2>
+            <p style="color: #94a3b8; margin-top: 10px;">Creating a ${tripState.mood.toLowerCase()} experience for ${tripState.destination} in ${tripState.weather}.</p>
         </div>
     `;
 
@@ -174,7 +164,6 @@ The total budget is ₹${tripState.budget} and the overall mood/vibe of the trip
 Format the response clearly using simple headings for Day 1, Day 2, Day 3, along with budget tips and top local foods to try.`;
 
     try {
-        // Endpoint updated to gemini-3.6-flash
         const response = await fetch(
             `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${GEMINI_API_KEY}`,
             {
@@ -194,39 +183,36 @@ Format the response clearly using simple headings for Day 1, Day 2, Day 3, along
 
         const data = await response.json();
 
-        // Check for error responses returned by Google's API
         if (data.error) {
-            console.error("Google API Returned Error:", data.error);
-            throw new Error(data.error.message || "API Error");
+            throw new Error(data.error.message || "API Request Failed");
         }
 
         if (data.candidates && data.candidates[0].content.parts[0].text) {
             const aiPlan = data.candidates[0].content.parts[0].text;
             
-            // Format bold text and newlines into readable HTML
             const formattedPlan = aiPlan
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                 .replace(/\n/g, '<br>');
 
             document.getElementById("content").innerHTML = `
-                <div class="form-card" style="width: 85%; max-width: 650px; text-align: left;">
-                    <h2 style="text-align: center;">🌴 Trip Plan to ${tripState.destination}</h2>
+                <div class="form-card" style="max-width: 700px; text-align: left;">
+                    <h2 style="text-align: center;">🌴 ${tripState.destination} Itinerary</h2>
                     <div style="margin: 15px 0; color: #94a3b8; font-size: 0.9rem; text-align: center;">
                         <strong>Season:</strong> ${tripState.weather} | 
                         <strong>Budget:</strong> ₹${tripState.budget} | 
                         <strong>Vibe:</strong> ${tripState.mood}
                     </div>
-                    <hr style="border-color: #334155; margin-bottom: 20px;">
-                    <div style="line-height: 1.6; color: #f8fafc;">${formattedPlan}</div>
+                    <hr style="border-color: #1e293b; margin-bottom: 20px;">
+                    <div style="line-height: 1.7; color: #f8fafc; font-size: 0.95rem;">${formattedPlan}</div>
                     <div style="text-align: center; margin-top: 25px;">
-                        <button onclick="home()" style="padding: 10px 25px; border-radius: 20px; background: #0284c7; color: white; border: none; font-weight: bold; cursor: pointer;">
+                        <button onclick="home()" style="width: auto; padding: 10px 25px;">
                             Plan Another Trip
                         </button>
                     </div>
                 </div>
             `;
         } else {
-            throw new Error("Invalid response format");
+            throw new Error("Invalid response from API");
         }
 
     } catch (error) {
@@ -234,9 +220,8 @@ Format the response clearly using simple headings for Day 1, Day 2, Day 3, along
         document.getElementById("content").innerHTML = `
             <div class="form-card">
                 <h2>⚠️ Error Generating Plan</h2>
-                <p><strong>Reason:</strong> ${error.message}</p>
-                <p style="font-size: 0.85rem; color: #94a3b8; margin-top: 10px;">Check your browser console (F12) for detailed logs.</p>
-                <button onclick="home()" style="margin-top: 15px;">Try Again</button>
+                <p style="color: #94a3b8; margin-top: 10px;"><strong>Reason:</strong> ${error.message}</p>
+                <button onclick="home()" style="margin-top: 20px;">Try Again</button>
             </div>
         `;
     }
